@@ -61,7 +61,7 @@
 				<tr>
 					<td><input type='text' id='txt_add_level' name='txt_add_level'></input></td>
 					<td><input type='text' id='txt_add_word' name='txt_add_word'></input></td>
-				<td style='width:30%'><button class='btn2' type='submit' name='btn_add' onclick=addWords()>ADD</button></td>
+				<td style='width:30%'><button class='btn2' name='btn_add'>ADD</button></td>
 				</tr>
 			</table><br><br>
 
