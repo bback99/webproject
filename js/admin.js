@@ -27,7 +27,7 @@ function resultInSearch() {
             $("#accordion").empty();                // Clears the contents
             return;
         }
-    } 
+    }
 
     if (s_word.value == "") {
         document.getElementById("resultInSearch").innerHTML = "";
@@ -68,30 +68,29 @@ function resultInSearch() {
     }
 }
 
-function addWords() {
-    var s_level = document.getElementById("txt_add_level");
-    var s_word = document.getElementById("txt_add_word");
-    if (s_word.value == "") {
-        document.getElementById("resultAddWords").innerHTML = "";
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+// ajax in jQuery style  
+$(document).ready(function() {
+    $('.btn2').click(function() {
+        var s_level = document.getElementById("txt_add_level");
+        var s_word = document.getElementById("txt_add_word");
+        if (s_level.value == "" || s_word.value == "") {
+            $('#resultAddWords').html("<p class='result_msg'>Need Values</p>");
+            return;
         }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("resultAddWords").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "processingAddWords.php?add_level=" + s_level.value + "&add_word=" + s_word.value, true);
-        xmlhttp.send();
-    }
-}
+        var dataString = "add_level="+s_level.value+"&add_word="+s_word.value;
+        $.ajax({
+            url: 'processingAddWords.php',
+            data: dataString,
+            type: 'GET',
+            error: function() { $('#resultAddWords').html('<p>An error has occurred</p>'); },
+            success: function(result) {
+                $('#resultAddWords').html(result);
+            },
+        });
+    });
+});
 
+// ajax in plain style
 function modifyWords(index) {
     var s_level = document.getElementById("level_" + index);
     var s_word = document.getElementById("word_" + index);
@@ -116,25 +115,29 @@ function modifyWords(index) {
     }
 }
 
+//////////////////////////////////////////////////////////////////////
+// ajax in jQuery style - using with name function
+$(document).ready(function() {
+    $('.btn3').click(function() {
+        removeWords(index);
+    });
+});
+
+// gave function name to call button that has specific ID
 function removeWords(index) {
+    alert(index);
     if (index < 0) {
-        document.getElementById("resultAddWords").innerHTML = "";
+        $('#resultAddWords').html("");
         return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                //document.getElementById("resultInSearch").innerHTML = this.responseText;
-                document.getElementById("resultAddWords").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "processingRemoveWords.php?index=" + index, true);
-        xmlhttp.send();
     }
+    var dataString = "index="+index;
+    $.ajax({
+        url: 'processingRemoveWords.php',
+        data: dataString,
+        type: 'GET',
+        error: function() { $('#resultAddWords').html('<p>An error has occurred</p>'); },
+        success: function(result) {
+            $('#resultAddWords').html(result);
+        },
+    });
 }
